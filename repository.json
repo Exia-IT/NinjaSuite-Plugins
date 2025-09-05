@@ -1,0 +1,92 @@
+{
+  "name": "NinjaSuite-Plugins",
+  "displayName": "Official NinjaSuite Plugin Repository",
+  "description": "High-quality, curated plugins for NinjaSuite with professional support and regular updates",
+  "version": "1.0.0",
+  "type": "official",
+  "baseUrl": "https://exia-it.github.io/NinjaSuite-Plugins",
+  "apiVersion": "1.0",
+  "lastUpdated": "2025-09-05T00:00:00Z",
+  "statistics": {
+    "totalPlugins": 0,
+    "totalDownloads": 0,
+    "averageRating": 0,
+    "lastPluginUpdate": null
+  },
+  "categories": [
+    {
+      "id": "automation",
+      "name": "Automation",
+      "description": "Task automation and workflow optimization plugins",
+      "icon": "🤖",
+      "pluginCount": 0
+    },
+    {
+      "id": "integration",
+      "name": "Integration",
+      "description": "Third-party service and API integration plugins",
+      "icon": "🔗",
+      "pluginCount": 0
+    },
+    {
+      "id": "monitoring",
+      "name": "Monitoring",
+      "description": "System monitoring and alerting plugins",
+      "icon": "📊",
+      "pluginCount": 0
+    },
+    {
+      "id": "reporting",
+      "name": "Reporting",
+      "description": "Data analysis and reporting plugins",
+      "icon": "📈",
+      "pluginCount": 0
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "description": "Security monitoring and compliance plugins",
+      "icon": "🔒",
+      "pluginCount": 0
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities",
+      "description": "General utility and helper plugins",
+      "icon": "⚙️",
+      "pluginCount": 0
+    },
+    {
+      "id": "examples",
+      "name": "Examples",
+      "description": "Example plugins for learning and development",
+      "icon": "📘",
+      "pluginCount": 0
+    }
+  ],
+  "qualityStandards": {
+    "minimumScore": 85,
+    "requiredTests": true,
+    "requiredDocumentation": true,
+    "codeReviewRequired": true,
+    "securityScanRequired": true
+  },
+  "submission": {
+    "enabled": true,
+    "requiresApproval": true,
+    "submissionProcess": "pull-request",
+    "reviewers": ["maintainer-team"],
+    "guidelines": "https://exia-it.github.io/NinjaSuite-Plugins/docs/contributing/submission-guidelines"
+  },
+  "support": {
+    "documentation": "https://exia-it.github.io/NinjaSuite-Plugins/docs",
+    "issues": "https://github.com/Exia-IT/NinjaSuite-Plugins/issues",
+    "discussions": "https://github.com/Exia-IT/NinjaSuite-Plugins/discussions",
+    "email": "plugins@exia-it.com"
+  },
+  "legal": {
+    "license": "MIT",
+    "termsOfService": "https://exia-it.github.io/NinjaSuite-Plugins/terms",
+    "privacyPolicy": "https://exia-it.github.io/NinjaSuite-Plugins/privacy"
+  }
+}

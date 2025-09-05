@@ -1,0 +1,35 @@
+# Build outputs
+dist/
+build/
+*.zip
+*.tar.gz
+
+# Logs
+*.log
+logs/
+
+# Cache files
+.cache/
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/settings.json
+.idea/
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+
+# Test files
+test-results/
+coverage/
+
+# Backup files
+*.backup
+*.backup.*

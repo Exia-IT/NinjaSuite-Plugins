@@ -1,0 +1,124 @@
+name: Plugin Validation
+
+on:
+  push:
+    branches: [ main, development ]
+    paths: [ 'plugins/**' ]
+  pull_request:
+    branches: [ main ]
+    paths: [ 'plugins/**' ]
+
+jobs:
+  validate-plugins:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup PowerShell
+      uses: azure/powershell@v1
+      with:
+        azPSVersion: 'latest'
+        inlineScript: |
+          Install-Module -Name Pester -Force -SkipPublisherCheck
+          
+    - name: Validate plugin structure
+      run: |
+        Get-ChildItem -Path "plugins" -Directory | ForEach-Object {
+          $pluginPath = $_.FullName
+          Write-Host "Validating plugin: $($_.Name)"
+          
+          # Check required files
+          $requiredFiles = @('plugin.json', "$($_.Name)Plugin.psm1")
+          foreach ($file in $requiredFiles) {
+            if (-not (Test-Path (Join-Path $pluginPath $file))) {
+              Write-Error "Missing required file: $file in plugin $($_.Name)"
+              exit 1
+            }
+          }
+          
+          # Validate plugin.json
+          try {
+            $pluginJson = Get-Content (Join-Path $pluginPath 'plugin.json') | ConvertFrom-Json
+            if (-not $pluginJson.name -or -not $pluginJson.version) {
+              Write-Error "Invalid plugin.json in plugin $($_.Name)"
+              exit 1
+            }
+          } catch {
+            Write-Error "Failed to parse plugin.json in plugin $($_.Name): $($_.Exception.Message)"
+            exit 1
+          }
+        }
+      shell: pwsh
+      
+    - name: Run plugin tests
+      run: |
+        if (Test-Path "tests") {
+          Invoke-Pester -Path "tests" -OutputFormat NUnitXml -OutputFile "test-results.xml"
+        }
+      shell: pwsh
+      
+    - name: Publish test results
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: Plugin Tests
+        path: test-results.xml
+        reporter: dotnet-trx
+
+  update-index:
+    needs: validate-plugins
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Update plugin index
+      run: |
+        # Generate updated plugin-index.json
+        $plugins = @()
+        $categories = @{
+          'automation' = @()
+          'integration' = @()
+          'monitoring' = @()
+          'reporting' = @()
+          'security' = @()
+          'utilities' = @()
+          'examples' = @()
+        }
+        
+        Get-ChildItem -Path "plugins" -Directory -Recurse | ForEach-Object {
+          $pluginJsonPath = Join-Path $_.FullName 'plugin.json'
+          if (Test-Path $pluginJsonPath) {
+            $plugin = Get-Content $pluginJsonPath | ConvertFrom-Json
+            $plugins += $plugin
+            
+            if ($categories.ContainsKey($plugin.category)) {
+              $categories[$plugin.category] += $plugin
+            }
+          }
+        }
+        
+        $index = @{
+          'apiVersion' = '1.0'
+          'lastUpdated' = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ')
+          'totalPlugins' = $plugins.Count
+          'categories' = $categories
+          'featured' = @($plugins | Where-Object { $_.featured -eq $true } | Select-Object -First 6)
+          'popular' = @($plugins | Sort-Object downloads -Descending | Select-Object -First 10)
+          'recent' = @($plugins | Sort-Object lastUpdated -Descending | Select-Object -First 10)
+        }
+        
+        $index | ConvertTo-Json -Depth 10 | Out-File -FilePath "plugin-index.json" -Encoding UTF8
+      shell: pwsh
+      
+    - name: Commit updated index
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add plugin-index.json
+        git diff --staged --quiet || git commit -m "Auto-update plugin index [skip ci]"
+        git push
