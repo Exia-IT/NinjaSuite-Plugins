@@ -15,8 +15,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     
     steps:
     - name: Checkout
@@ -30,6 +33,9 @@ jobs:
         # Copy all necessary files to _site directory
         mkdir -p _site
         cp -r * _site/ || true
+        
+        # Remove .git directory from _site
+        rm -rf _site/.git
         
         # Ensure required files exist
         if [ ! -f _site/index.html ]; then
@@ -47,19 +53,11 @@ jobs:
         find _site -name "*.html" -type f -exec sed -i 's|Exia-IT|${{ github.repository_owner }}|g' {} +
         find _site -name "*.js" -type f -exec sed -i 's|Exia-IT|${{ github.repository_owner }}|g' {} +
       
-    - name: Upload artifact
+    - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v3
       with:
         path: '_site'
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    
-    steps:
+        
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
