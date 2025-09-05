@@ -1,0 +1,20 @@
+{
+  "name": "Hello World",
+  "id": "hello-world",
+  "version": "1.0.0",
+  "description": "A simple example plugin for learning NinjaSuite plugin development",
+  "author": "NinjaSuite Team",
+  "category": "examples",
+  "entryPoint": "HelloWorldPlugin.psm1",
+  "featured": true,
+  "keywords": ["example", "learning", "tutorial"],
+  "requirements": {
+    "ninjaSuiteVersion": ">=0.6.0",
+    "powerShellVersion": ">=7.2"
+  },
+  "permissions": [],
+  "settings": {},
+  "lastUpdated": "2025-09-05T00:00:00Z",
+  "downloads": 0,
+  "rating": 5.0
+}
