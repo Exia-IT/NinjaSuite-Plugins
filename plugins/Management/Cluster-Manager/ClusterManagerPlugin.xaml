@@ -1,0 +1,76 @@
+<Grid Margin="10" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{DynamicResource App.Window.Background}">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    
+    <ProgressBar x:Name="ActionProgress" Grid.Row="0" Height="6" Margin="0,0,0,4" Visibility="Collapsed" IsIndeterminate="True"/>
+    
+    <GroupBox Header="Cluster Connection" Grid.Row="0" Margin="0,0,0,8">
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Cluster:" VerticalAlignment="Center"/>
+            <TextBox x:Name="ClusterNameBox" Width="180" Margin="4,0"/>
+            <Button x:Name="ConnectClusterBtn" Content="Connect" Width="80" Margin="4,0"/>
+            <Button x:Name="RefreshNodesBtn" Content="Refresh" Width="80" Margin="4,0"/>
+            <Button x:Name="OpenFullBtn" Content="Open Full UI" Width="110" Margin="12,0,0,0"/>
+        </StackPanel>
+    </GroupBox>
+    
+    <Grid Grid.Row="1" Margin="0,0,0,8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        
+        <GroupBox Header="Cluster Nodes" Grid.Column="0" Margin="0,0,8,0">
+            <ListBox x:Name="ClusterNodesList" Height="160" SelectionMode="Extended"/>
+        </GroupBox>
+        
+        <StackPanel Grid.Column="1">
+            <Button x:Name="MatchBtn" Content="Match >>" Margin="0,0,0,6"/>
+            <Button x:Name="MaintStartBtn" Content="Start Maint" Margin="0,0,0,6"/>
+            <Button x:Name="MaintEndBtn" Content="End Maint" Margin="0,0,0,6"/>
+            <Button x:Name="PauseDrainBtn" Content="Pause + Drain" Margin="0,0,0,6"/>
+        </StackPanel>
+        
+        <GroupBox Header="Matched Devices" Grid.Column="2">
+            <ListBox x:Name="MatchedDevicesList" Height="160"/>
+        </GroupBox>
+    </Grid>
+    
+    <GroupBox Header="Maintenance / Actions" Grid.Row="2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,6">
+                <Label Content="Duration (h):" VerticalAlignment="Center"/>
+                <TextBox x:Name="DurationBox" Width="40" Text="4" Margin="4,0"/>
+                <CheckBox x:Name="DisablePatching" Content="Patching" Margin="10,0" IsChecked="True"/>
+                <CheckBox x:Name="DisableAV" Content="AV" Margin="4,0" IsChecked="True"/>
+                <CheckBox x:Name="DisableMonitoring" Content="Monitoring" Margin="4,0" IsChecked="True"/>
+                <CheckBox x:Name="DisableAutomation" Content="Automation" Margin="4,0"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,6">
+                <Button x:Name="RunHealthBtn" Content="Health Check" Margin="0,0,6,0"/>
+                <Button x:Name="RunUpdatesBtn" Content="Windows Updates" Margin="0,0,6,0"/>
+                <Button x:Name="RunCustomBtn" Content="Custom Script" Margin="0,0,6,0"/>
+            </StackPanel>
+            
+            <TextBox x:Name="ActionLogBox" Grid.Row="2" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" IsReadOnly="True" 
+                     Background="{DynamicResource App.Background.Secondary}" BorderBrush="{DynamicResource App.Border}" FontFamily="Consolas"/>
+        </Grid>
+    </GroupBox>
+    
+    <GroupBox Header="Log" Grid.Row="3" Margin="0,8,0,0">
+        <TextBox x:Name="ClusterTabLog" Height="100" VerticalScrollBarVisibility="Auto" IsReadOnly="True" TextWrapping="Wrap"
+                 Background="{DynamicResource App.Background.Secondary}" BorderBrush="{DynamicResource App.Border}" FontFamily="Consolas"/>
+    </GroupBox>
+</Grid>

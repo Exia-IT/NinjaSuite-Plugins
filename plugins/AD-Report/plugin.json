@@ -1,0 +1,39 @@
+{
+  "name": "AD Report",
+  "version": "1.0.0",
+  "description": "Generate comprehensive Active Directory reports with detailed analytics on users, groups, computers, OUs, and GPOs",
+  "author": "NinjaSuite Team",
+  "category": "Active Directory",
+  "tabTitle": "AD Report",
+  "tabIcon": "AD",
+  "enabled": true,
+  "dependencies": [
+    "ReportHTML"
+  ],
+  "files": {
+    "module": "ADReportPlugin.psm1",
+    "xaml": "ADReportPlugin.xaml"
+  },
+  "permissions": [
+    "AD_READ_ACCESS",
+    "GPO_READ_ACCESS",
+    "SECURITY_LOG_READ"
+  ],
+  "minimumVersion": "0.4.0",
+  "requirements": {
+    "modules": [
+      "ActiveDirectory",
+      "GroupPolicy"
+    ],
+    "features": [
+      "RSAT-AD-PowerShell",
+      "RSAT-AD-AdminCenter",
+      "RSAT-ADDS-Tools"
+    ]
+  },
+  "quality": {
+    "version": "1.0.0",
+    "score": 0,
+    "lastScored": "2025-09-06"
+  }
+}

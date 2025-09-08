@@ -1,0 +1,17 @@
+{
+    "name": "Organization Report",
+    "version": "1.0.0",
+    "description": "Generate comprehensive organization reports with device counts and breakdowns",
+    "author": "NinjaSuite Team",
+    "category": "Reporting",
+    "tabTitle": "Org Report",
+    "tabIcon": "OR",
+    "enabled": true,
+    "dependencies": [],
+    "files": {
+        "module": "OrganizationReportPlugin.psm1",
+        "xaml": "OrganizationReportPlugin.xaml"
+    },
+    "permissions": ["ORG_REPORT_ACCESS", "DEVICE_READ", "ORGANIZATION_READ"],
+    "minimumVersion": "0.4.0"
+}

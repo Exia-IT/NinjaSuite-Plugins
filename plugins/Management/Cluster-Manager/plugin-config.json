@@ -1,0 +1,9 @@
+{
+    "DefaultClusterSize": "5",
+    "EnableAutoScale": true,
+    "ScaleThreshold": "80",
+    "ManagementMode": "Automatic",
+    "MonitorInterval": "30",
+    "AlertThreshold": "High",
+    "SendEmailAlerts": true
+}

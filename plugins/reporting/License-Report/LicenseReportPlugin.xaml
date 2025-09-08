@@ -1,0 +1,38 @@
+<Grid Margin="8" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    
+    <GroupBox Header="License Report Options" Grid.Row="0" Margin="0,0,0,8">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,4">
+                <CheckBox x:Name="ChkSaveHtml" Content="Save HTML" Margin="0,0,12,0" IsChecked="True"/>
+                <TextBox x:Name="HtmlPathBox" Width="320" Margin="0,0,4,0"/>
+                <Button x:Name="BrowseHtml" Content="Browse..." Width="80"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,4">
+                <CheckBox x:Name="ChkEmail" Content="Email Report" Margin="0,0,12,0"/>
+                <TextBox x:Name="EmailRecipient" Width="260" Margin="0,0,4,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,4">
+                <CheckBox x:Name="ChkParallel" Content="Parallel Processing" Margin="0,0,12,0" IsChecked="True"/>
+                <TextBlock Text="Throttle:" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <TextBox x:Name="ParallelThrottle" Width="50" Text="8" Margin="0,0,12,0"/>
+                <CheckBox x:Name="ChkOpenAfter" Content="Open after completion" IsChecked="True"/>
+            </StackPanel>
+        </StackPanel>
+    </GroupBox>
+    
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+        <Button x:Name="RunLicenseReport" Content="Generate Report" Width="140"/>
+        <Button x:Name="CancelLicenseReport" Content="Cancel" Width="90" Margin="6,0,0,0" IsEnabled="False"/>
+        <ProgressBar x:Name="LicenseProgress" Width="160" Height="16" Margin="12,0" Visibility="Collapsed" IsIndeterminate="False"/>
+        <TextBlock x:Name="LicenseStatus" Text="Ready to generate license report" VerticalAlignment="Center" Margin="8,0,0,0"/>
+    </StackPanel>
+    
+    <TextBox x:Name="LicenseLog" Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+             TextWrapping="Wrap" IsReadOnly="True" FontFamily="Consolas" 
+             Background="{DynamicResource App.Background.Secondary}" BorderBrush="{DynamicResource App.Border}"/>
+</Grid>

@@ -1,0 +1,95 @@
+{
+    "name": "License Report Enhanced",
+    "version": "1.1.0",
+    "description": "Enhanced license reports with external PowerShell module dependencies for advanced functionality",
+    "author": "NinjaSuite Team",
+    "category": "Reporting",
+    "tags": ["license", "reporting", "compliance", "enhanced"],
+    "tabTitle": "License Report",
+    "tabIcon": "LR",
+    "enabled": true,
+    "requiresUI": true,
+    "files": {
+        "module": "LicenseReportPlugin.psm1",
+        "xaml": "LicenseReportPlugin.xaml"
+    },
+    "permissions": [
+        "LICENSE_REPORT_ACCESS", 
+        "DEVICE_READ", 
+        "CUSTOM_FIELDS_READ"
+    ],
+    "dependencies": [
+        {
+            "name": "ImportExcel",
+            "type": "module",
+            "source": "PowerShellGallery",
+            "minimumVersion": "7.0.0",
+            "required": true,
+            "autoInstall": false,
+            "description": "PowerShell module for working with Excel files without Excel installed"
+        },
+        {
+            "name": "PnP.PowerShell",
+            "type": "module",
+            "source": "PowerShellGallery",
+            "minimumVersion": "1.12.0",
+            "required": false,
+            "autoInstall": false,
+            "description": "Optional SharePoint/Teams integration for report distribution"
+        },
+        {
+            "name": "PSWriteHTML",
+            "type": "module",
+            "source": "PowerShellGallery",
+            "minimumVersion": "0.0.180",
+            "required": true,
+            "autoInstall": true,
+            "description": "Enhanced HTML report generation with advanced formatting"
+        }
+    ],
+    "compatibility": {
+        "minimumNinjaSuiteVersion": "0.6.0",
+        "powerShellVersion": "5.1",
+        "platforms": ["Windows"]
+    },
+    "settings": {
+        "configurable": true,
+        "schema": {
+            "useExcelExport": {
+                "type": "boolean",
+                "default": false,
+                "description": "Enable Excel export functionality (requires ImportExcel module)",
+                "required": false
+            },
+            "enableSharePointUpload": {
+                "type": "boolean", 
+                "default": false,
+                "description": "Enable SharePoint upload (requires PnP.PowerShell module)",
+                "required": false
+            },
+            "htmlTemplateStyle": {
+                "type": "string",
+                "enum": ["Basic", "Enhanced", "Corporate"],
+                "default": "Enhanced",
+                "description": "HTML report template style"
+            }
+        }
+    },
+    "ui": {
+        "tabTitle": "License Report+",
+        "tabIcon": "LR+",
+        "iconPath": "assets/license-enhanced.png"
+    },
+    "metadata": {
+        "created": "2025-09-05T00:00:00Z",
+        "updated": "2025-09-05T00:00:00Z",
+        "license": "MIT",
+        "website": "https://github.com/NinjaSuite/plugins",
+        "supportContact": "support@ninjasuite.example"
+    },
+    "documentation": {
+        "readme": "README.md",
+        "examples": "EXAMPLES.md",
+        "changelog": "CHANGELOG.md"
+    }
+}

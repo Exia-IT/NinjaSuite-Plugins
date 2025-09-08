@@ -1,0 +1,97 @@
+<Window x:Class="ClusterManagerSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cluster Manager Settings" Height="350" Width="500"
+        ResizeMode="CanResize" WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Settings Content -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Cluster Configuration -->
+                <GroupBox Header="Cluster Configuration" Margin="0,0,0,10">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Default Cluster Size -->
+                        <Label Content="Default Cluster Size:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="DefaultClusterSize" Grid.Row="0" Grid.Column="1" Text="5" VerticalAlignment="Center" Width="100" HorizontalAlignment="Left"/>
+                        
+                        <!-- Auto Scale -->
+                        <Label Content="Enable Auto Scale:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="EnableAutoScale" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsChecked="True"/>
+                        
+                        <!-- Scale Threshold -->
+                        <Label Content="Scale Threshold (%):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="ScaleThreshold" Grid.Row="2" Grid.Column="1" Text="80" VerticalAlignment="Center" Width="100" HorizontalAlignment="Left"/>
+                        
+                        <!-- Management Mode -->
+                        <Label Content="Management Mode:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="ManagementMode" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Width="150" HorizontalAlignment="Left" SelectedValue="Automatic">
+                            <ComboBoxItem Content="Manual"/>
+                            <ComboBoxItem Content="Automatic"/>
+                            <ComboBoxItem Content="Hybrid"/>
+                        </ComboBox>
+                    </Grid>
+                </GroupBox>
+                
+                <!-- Monitoring Settings -->
+                <GroupBox Header="Monitoring Settings" Margin="0,0,0,10">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Monitor Interval -->
+                        <Label Content="Monitor Interval (sec):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="MonitorInterval" Grid.Row="0" Grid.Column="1" Text="30" VerticalAlignment="Center" Width="100" HorizontalAlignment="Left"/>
+                        
+                        <!-- Alert Threshold -->
+                        <Label Content="Alert Threshold:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="AlertThreshold" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="120" HorizontalAlignment="Left" SelectedValue="High">
+                            <ComboBoxItem Content="Low"/>
+                            <ComboBoxItem Content="Medium"/>
+                            <ComboBoxItem Content="High"/>
+                            <ComboBoxItem Content="Critical"/>
+                        </ComboBox>
+                        
+                        <!-- Send Email Alerts -->
+                        <Label Content="Send Email Alerts:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="SendEmailAlerts" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="True"/>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+        
+        <!-- Buttons -->
+        <Grid Grid.Row="1" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Button x:Name="SaveButton" Content="Save" Grid.Column="1" Width="80" Height="30" Margin="0,0,10,0" IsDefault="True"/>
+            <Button x:Name="CancelButton" Content="Cancel" Grid.Column="2" Width="80" Height="30" IsCancel="True"/>
+        </Grid>
+    </Grid>
+</Window>

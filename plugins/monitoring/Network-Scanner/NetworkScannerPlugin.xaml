@@ -1,0 +1,250 @@
+<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header Section -->
+        <Border Grid.Row="0" Style="{DynamicResource ModernCard}" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Network Scanner" FontSize="24" FontWeight="Bold" 
+                               Foreground="{DynamicResource App.Window.Foreground}" Margin="0,0,0,4"/>
+                    <TextBlock Text="Discover and analyze devices on your network" FontSize="14" 
+                               Foreground="{DynamicResource App.Secondary.Foreground}"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="SettingsButton" Content="Settings" Width="70" Height="36" 
+                            Style="{DynamicResource ModernSecondaryButton}" Margin="0,0,8,0"
+                            ToolTip="Scanner Settings" FontSize="12"/>
+                    <Button x:Name="ExportButton" Content="Export" Width="60" Height="36" 
+                            Style="{DynamicResource ModernSecondaryButton}" Margin="0,0,8,0"
+                            ToolTip="Export Results" FontSize="12"/>
+                    <Button x:Name="RefreshButton" Content="Refresh" Width="70" Height="36" 
+                            Style="{DynamicResource ModernSecondaryButton}"
+                            ToolTip="Refresh Scan" FontSize="12"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Scan Configuration -->
+        <Border Grid.Row="1" Style="{DynamicResource ModernCard}" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" Text="Subnet:" VerticalAlignment="Center" 
+                           Foreground="{DynamicResource App.Window.Foreground}" Margin="0,0,12,0"/>
+                
+                <TextBox x:Name="SubnetTextBox" Grid.Column="1" 
+                         Text="192.168.1.0/24" Style="{DynamicResource ModernTextBox}"
+                         ToolTip="Enter subnet to scan (e.g., 192.168.1.0/24)"/>
+                
+                <CheckBox x:Name="PortScanCheckBox" Grid.Column="2" 
+                          Content="Port Scan" IsChecked="True" VerticalAlignment="Center"
+                          Foreground="{DynamicResource App.Window.Foreground}" Margin="16,0,16,0"/>
+                
+                <Button x:Name="StartScanButton" Grid.Column="3" Content="Start Scan" 
+                        Width="120" Height="40" Style="{DynamicResource ModernButton}"
+                        FontWeight="SemiBold"/>
+            </Grid>
+        </Border>
+        
+        <!-- Results Area -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Device List -->
+            <Border Grid.Column="0" Style="{DynamicResource ModernCard}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- List Header -->
+                    <Border Grid.Row="0" Background="{DynamicResource App.Secondary.Background}" 
+                            Padding="12,8" CornerRadius="4,4,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Grid.Column="0" Text="Discovered Devices" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource App.Window.Foreground}"/>
+                            
+                            <TextBlock x:Name="DeviceCountText" Grid.Column="1" Text="0 devices"
+                                       Foreground="{DynamicResource App.Secondary.Foreground}" FontSize="12"/>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Device ListView -->
+                    <ListView x:Name="DeviceListView" Grid.Row="1" 
+                              Background="{DynamicResource App.Window.Background}"
+                              BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="IP Address" DisplayMemberBinding="{Binding IPAddress}" Width="120"/>
+                                <GridViewColumn Header="Hostname" DisplayMemberBinding="{Binding Hostname}" Width="150"/>
+                                <GridViewColumn Header="MAC Address" DisplayMemberBinding="{Binding MacAddress}" Width="140"/>
+                                <GridViewColumn Header="Vendor" DisplayMemberBinding="{Binding Vendor}" Width="100"/>
+                                <GridViewColumn Header="Type" DisplayMemberBinding="{Binding DeviceType}" Width="120"/>
+                                <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="80"/>
+                                <GridViewColumn Header="Response" DisplayMemberBinding="{Binding ResponseTime}" Width="80"/>
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Padding" Value="4"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Status}" Value="Online">
+                                        <Setter Property="Foreground" Value="{DynamicResource App.Success.Foreground}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="Offline">
+                                        <Setter Property="Foreground" Value="{DynamicResource App.Error.Foreground}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </Border>
+            
+            <!-- Splitter -->
+            <GridSplitter Grid.Column="1" Background="{DynamicResource App.Border}" 
+                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            
+            <!-- Device Details Panel -->
+            <Border Grid.Column="2" Style="{DynamicResource ModernCard}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Details Header -->
+                    <Border Grid.Row="0" Background="{DynamicResource App.Secondary.Background}" 
+                            Padding="12,8" CornerRadius="4,4,0,0">
+                        <TextBlock Text="Device Details" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource App.Window.Foreground}"/>
+                    </Border>
+                    
+                    <!-- Device Info -->
+                    <StackPanel x:Name="DeviceInfoPanel" Grid.Row="1" Margin="12" Visibility="Collapsed">
+                        <TextBlock x:Name="SelectedIPText" FontSize="16" FontWeight="Bold" 
+                                   Foreground="{DynamicResource App.Accent}" Margin="0,0,0,8"/>
+                        <TextBlock x:Name="SelectedHostnameText" Foreground="{DynamicResource App.Window.Foreground}" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="SelectedMacText" Foreground="{DynamicResource App.Secondary.Foreground}" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="SelectedVendorText" Foreground="{DynamicResource App.Secondary.Foreground}" FontSize="11" Margin="0,0,0,8"/>
+                        <TextBlock x:Name="SelectedTypeText" Foreground="{DynamicResource App.Window.Foreground}" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="SelectedStatusText" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    </StackPanel>
+                    
+                    <!-- Open Ports -->
+                    <Border Grid.Row="2" Margin="12,0,12,12" Visibility="{Binding ElementName=DeviceInfoPanel, Path=Visibility}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Text="Open Ports" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource App.Window.Foreground}" Margin="0,0,0,8"/>
+                            
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ListBox x:Name="OpenPortsList" Background="Transparent" BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{DynamicResource App.Accent}" CornerRadius="12" 
+                                                    Padding="8,4" Margin="2">
+                                                <TextBlock Text="{Binding}" Foreground="White" FontSize="11" 
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                </ListBox>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Action Buttons -->
+                    <StackPanel Grid.Row="3" Margin="12" Visibility="{Binding ElementName=DeviceInfoPanel, Path=Visibility}">
+                        <Button x:Name="PingDeviceButton" Content="Ping Device" 
+                                Style="{DynamicResource ModernSecondaryButton}" Margin="0,0,0,4"/>
+                        <Button x:Name="PortScanDeviceButton" Content="Port Scan" 
+                                Style="{DynamicResource ModernSecondaryButton}" Margin="0,0,0,4"/>
+                        <Button x:Name="OpenRDPButton" Content="Remote Desktop" 
+                                Style="{DynamicResource ModernSecondaryButton}"/>
+                    </StackPanel>
+                    
+                    <!-- No Selection Message -->
+                    <TextBlock x:Name="NoSelectionText" Grid.Row="1" Grid.RowSpan="3" 
+                               Text="Select a device from the list to view details" 
+                               TextAlignment="Center" VerticalAlignment="Center"
+                               Foreground="{DynamicResource App.Secondary.Foreground}"
+                               FontStyle="Italic"/>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <!-- Status Bar -->
+        <Border Grid.Row="3" Background="{DynamicResource App.Secondary.Background}" 
+                BorderBrush="{DynamicResource App.Border}" BorderThickness="0,1,0,0" 
+                Padding="12,8" Margin="0,16,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock x:Name="StatusText" Text="Ready to scan" 
+                               Foreground="{DynamicResource App.Secondary.Foreground}" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                
+                <ProgressBar x:Name="ScanProgressBar" Grid.Column="1" 
+                             Width="200" Height="4" Margin="12,0" 
+                             Style="{DynamicResource ModernProgressBar}"
+                             Visibility="Collapsed"/>
+                
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <TextBlock Text="Last scan: " 
+                               Foreground="{DynamicResource App.Secondary.Foreground}" 
+                               VerticalAlignment="Center"/>
+                    <TextBlock x:Name="LastScanText" Text="Never" 
+                               Foreground="{DynamicResource App.Secondary.Foreground}" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

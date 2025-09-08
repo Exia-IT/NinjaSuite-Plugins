@@ -1,0 +1,17 @@
+{
+    "name": "License Report",
+    "version": "1.0.0",
+    "description": "Generate comprehensive license reports for Windows servers and custom fields",
+    "author": "NinjaSuite Team",
+    "category": "Reporting",
+    "tabTitle": "License Report",
+    "tabIcon": "LR",
+    "enabled": true,
+    "dependencies": [],
+    "files": {
+        "module": "LicenseReportPlugin.psm1",
+        "xaml": "LicenseReportPlugin.xaml"
+    },
+    "permissions": ["LICENSE_REPORT_ACCESS", "DEVICE_READ", "CUSTOM_FIELDS_READ"],
+    "minimumVersion": "0.4.0"
+}

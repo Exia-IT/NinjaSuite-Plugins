@@ -1,0 +1,17 @@
+{
+    "name": "Cluster Manager",
+    "version": "1.0.0",
+    "description": "Manage Windows clusters and perform maintenance operations",
+    "author": "NinjaSuite Team",
+    "category": "Infrastructure",
+    "tabTitle": "Cluster Manager",
+    "tabIcon": "CM",
+    "enabled": true,
+    "dependencies": [],
+    "files": {
+        "module": "ClusterManagerPlugin.psm1",
+        "xaml": "ClusterManagerPlugin.xaml"
+    },
+    "permissions": ["CLUSTER_MANAGEMENT", "DEVICE_WRITE", "MAINTENANCE_MODE"],
+    "minimumVersion": "0.4.0"
+}
