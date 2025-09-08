@@ -1,17 +1,113 @@
 {
-  "apiVersion": "1.0",
-  "lastUpdated": "2025-09-05T00:00:00Z",
-  "totalPlugins": 0,
+  "totalPlugins": 6,
+  "lastUpdated": "2025-09-08T10:45:25Z",
+  "popular": [
+    "network-scanner",
+    "hello-world",
+    "ad-report"
+  ],
+  "recent": [
+    "ad-report",
+    "cluster-manager",
+    "network-scanner",
+    "license-report"
+  ],
   "categories": {
     "automation": [],
+    "security": [
+      {
+        "name": "AD Report",
+        "author": "NinjaSuite Team",
+        "description": "Generate comprehensive Active Directory reports with detailed analytics on users, groups, computers, OUs, and GPOs",
+        "lastUpdated": "2025-09-08T10:45:25Z",
+        "enabled": true,
+        "tags": null,
+        "version": "1.0.0",
+        "id": "ad-report",
+        "path": "plugins/Active Directory/AD-Report"
+      }
+    ],
+    "utilities": [
+      {
+        "name": "Cluster Manager",
+        "author": "NinjaSuite Team",
+        "description": "Manage Windows clusters and perform maintenance operations",
+        "lastUpdated": "2025-09-08T10:45:25Z",
+        "enabled": true,
+        "tags": null,
+        "version": "1.0.0",
+        "id": "cluster-manager",
+        "path": "plugins/Management/Cluster-Manager"
+      }
+    ],
     "integration": [],
-    "monitoring": [],
-    "reporting": [],
-    "security": [],
-    "utilities": [],
-    "examples": []
+    "reporting": [
+      {
+        "name": "License Report",
+        "author": "NinjaSuite Team",
+        "description": "Generate comprehensive license reports for Windows servers and custom fields",
+        "lastUpdated": "2025-09-08T10:45:25Z",
+        "enabled": true,
+        "tags": null,
+        "version": "1.0.0",
+        "id": "license-report",
+        "path": "plugins/reporting/License-Report"
+      },
+      {
+        "name": "Organization Report",
+        "author": "NinjaSuite Team",
+        "description": "Generate comprehensive organization reports with device counts and breakdowns",
+        "lastUpdated": "2025-09-08T10:45:25Z",
+        "enabled": true,
+        "tags": null,
+        "version": "1.0.0",
+        "id": "organization-report",
+        "path": "plugins/reporting/Organization-Report"
+      }
+    ],
+    "monitoring": [
+      {
+        "name": "Network Scanner",
+        "author": "NinjaSuite Team (Based on illsk1lls/IPScanner)",
+        "description": "Advanced network discovery and scanning tool for identifying devices, ports, and network topology with real-time monitoring capabilities",
+        "lastUpdated": "2025-09-08T10:45:25Z",
+        "enabled": true,
+        "tags": [
+          "network",
+          "scanner",
+          "discovery",
+          "monitoring",
+          "security",
+          "ip",
+          "port"
+        ],
+        "version": "1.0.0",
+        "id": "network-scanner",
+        "path": "plugins/monitoring/Network-Scanner"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Hello World",
+        "author": "NinjaSuite Team",
+        "description": "A simple example plugin for learning NinjaSuite plugin development",
+        "lastUpdated": "2025-09-05T00:00:00Z",
+        "enabled": true,
+        "tags": [
+          "example",
+          "learning",
+          "tutorial"
+        ],
+        "version": "1.0.0",
+        "id": "hello-world",
+        "path": "plugins/examples/hello-world"
+      }
+    ]
   },
-  "featured": [],
-  "popular": [],
-  "recent": []
+  "apiVersion": "1.0",
+  "featured": [
+    "ad-report",
+    "hello-world",
+    "network-scanner"
+  ]
 }

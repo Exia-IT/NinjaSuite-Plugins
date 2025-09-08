@@ -6,12 +6,12 @@
   "type": "official",
   "baseUrl": "https://exia-it.github.io/NinjaSuite-Plugins",
   "apiVersion": "1.0",
-  "lastUpdated": "2025-09-05T00:00:00Z",
+  "lastUpdated": "2025-09-08T10:45:25Z",
   "statistics": {
-    "totalPlugins": 0,
+    "totalPlugins": 6,
     "totalDownloads": 0,
-    "averageRating": 0,
-    "lastPluginUpdate": null
+    "averageRating": 4.8,
+    "lastPluginUpdate": "2025-09-08T10:45:25Z"
   },
   "categories": [
     {
@@ -33,35 +33,35 @@
       "name": "Monitoring",
       "description": "System monitoring and alerting plugins",
       "icon": "📊",
-      "pluginCount": 0
+      "pluginCount": 1
     },
     {
       "id": "reporting",
       "name": "Reporting",
       "description": "Data analysis and reporting plugins",
       "icon": "📈",
-      "pluginCount": 0
+      "pluginCount": 2
     },
     {
       "id": "security",
       "name": "Security",
       "description": "Security monitoring and compliance plugins",
       "icon": "🔒",
-      "pluginCount": 0
+      "pluginCount": 1
     },
     {
       "id": "utilities",
       "name": "Utilities",
       "description": "General utility and helper plugins",
       "icon": "⚙️",
-      "pluginCount": 0
+      "pluginCount": 1
     },
     {
       "id": "examples",
       "name": "Examples",
       "description": "Example plugins for learning and development",
       "icon": "📘",
-      "pluginCount": 0
+      "pluginCount": 1
     }
   ],
   "qualityStandards": {
@@ -75,7 +75,9 @@
     "enabled": true,
     "requiresApproval": true,
     "submissionProcess": "pull-request",
-    "reviewers": ["maintainer-team"],
+    "reviewers": [
+      "maintainer-team"
+    ],
     "guidelines": "https://exia-it.github.io/NinjaSuite-Plugins/docs/contributing/submission-guidelines"
   },
   "support": {

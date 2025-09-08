@@ -1,0 +1,202 @@
+name: Update Plugin Registry
+
+on:
+  push:
+    paths:
+      - 'plugins/**/plugin.json'
+      - 'plugins/**/*.psm1'
+      - 'plugins/**/*.xaml'
+  pull_request:
+    paths:
+      - 'plugins/**/plugin.json'
+      - 'plugins/**/*.psm1'
+      - 'plugins/**/*.xaml'
+  workflow_dispatch:
+
+jobs:
+  update-registry:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup PowerShell
+        uses: actions/setup-powershell@v1
+
+      - name: Install required PowerShell modules
+        shell: pwsh
+        run: |
+          Install-Module -Name PowerShellForGitHub -Force -Scope CurrentUser
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+
+      - name: Run Plugin Registry Update Script
+        shell: pwsh
+        run: |
+          # Create the update script inline
+          $updateScript = @'
+          # Plugin Registry Update Script
+          $ErrorActionPreference = "Stop"
+          
+          Write-Host "🔍 Scanning for plugins..."
+          
+          # Find all plugin.json files
+          $pluginFiles = Get-ChildItem -Path "plugins" -Name "plugin.json" -Recurse
+          $plugins = @()
+          $categories = @{
+              "automation" = @()
+              "integration" = @()
+              "monitoring" = @()
+              "reporting" = @()
+              "security" = @()
+              "utilities" = @()
+              "examples" = @()
+          }
+          
+          foreach ($pluginFile in $pluginFiles) {
+              $pluginPath = Split-Path $pluginFile -Parent
+              $fullPath = Join-Path "plugins" $pluginPath
+              
+              Write-Host "📦 Processing plugin: $fullPath"
+              
+              try {
+                  $pluginJson = Get-Content (Join-Path $fullPath "plugin.json") | ConvertFrom-Json
+                  
+                  # Determine category based on path or plugin.json category
+                  $category = "utilities" # default
+                  if ($pluginPath -match "examples") { $category = "examples" }
+                  elseif ($pluginPath -match "monitoring") { $category = "monitoring" }
+                  elseif ($pluginPath -match "reporting") { $category = "reporting" }
+                  elseif ($pluginPath -match "Active Directory|AD-") { $category = "security" }
+                  elseif ($pluginPath -match "Management|Cluster") { $category = "utilities" }
+                  elseif ($pluginJson.category) {
+                      switch ($pluginJson.category.ToLower()) {
+                          "monitoring" { $category = "monitoring" }
+                          "reporting" { $category = "reporting" }
+                          "examples" { $category = "examples" }
+                          "active directory" { $category = "security" }
+                          "infrastructure" { $category = "utilities" }
+                          "automation" { $category = "automation" }
+                          "integration" { $category = "integration" }
+                          "security" { $category = "security" }
+                      }
+                  }
+                  
+                  # Create plugin entry
+                  $pluginEntry = @{
+                      id = ($pluginJson.id) ? $pluginJson.id : ($pluginJson.name -replace '\s+', '-').ToLower()
+                      name = $pluginJson.name
+                      version = $pluginJson.version
+                      description = $pluginJson.description
+                      author = $pluginJson.author
+                      path = $fullPath -replace '\\', '/'
+                      enabled = if ($null -ne $pluginJson.enabled) { $pluginJson.enabled } else { $true }
+                      tags = if ($pluginJson.tags) { $pluginJson.tags } elseif ($pluginJson.keywords) { $pluginJson.keywords } else { @() }
+                      lastUpdated = if ($pluginJson.lastUpdated) { $pluginJson.lastUpdated } else { (Get-Date).ToString("yyyy-MM-ddTHH:mm:ssZ") }
+                  }
+                  
+                  $categories[$category] += $pluginEntry
+                  $plugins += $pluginEntry
+                  
+                  Write-Host "✅ Added $($pluginJson.name) to category: $category"
+              }
+              catch {
+                  Write-Warning "⚠️ Failed to process plugin at $fullPath`: $_"
+              }
+          }
+          
+          Write-Host "📊 Found $($plugins.Count) total plugins"
+          
+          # Update plugin-index.json
+          $pluginIndex = @{
+              apiVersion = "1.0"
+              lastUpdated = (Get-Date).ToString("yyyy-MM-ddTHH:mm:ssZ")
+              totalPlugins = $plugins.Count
+              categories = $categories
+              featured = @($plugins | Where-Object { $_.tags -contains "featured" -or $_.name -match "Network Scanner|AD Report|Hello World" } | Select-Object -First 3 | ForEach-Object { $_.id })
+              popular = @($plugins | Sort-Object { $_.tags.Count } -Descending | Select-Object -First 3 | ForEach-Object { $_.id })
+              recent = @($plugins | Sort-Object lastUpdated -Descending | Select-Object -First 4 | ForEach-Object { $_.id })
+          }
+          
+          $pluginIndex | ConvertTo-Json -Depth 10 | Set-Content "plugin-index.json" -Encoding UTF8
+          Write-Host "✅ Updated plugin-index.json"
+          
+          # Update repository.json statistics
+          $repoJson = Get-Content "repository.json" | ConvertFrom-Json
+          $repoJson.statistics.totalPlugins = $plugins.Count
+          $repoJson.statistics.lastPluginUpdate = (Get-Date).ToString("yyyy-MM-ddTHH:mm:ssZ")
+          
+          # Update category counts
+          foreach ($cat in $repoJson.categories) {
+              $cat.pluginCount = $categories[$cat.id].Count
+          }
+          
+          $repoJson | ConvertTo-Json -Depth 10 | Set-Content "repository.json" -Encoding UTF8
+          Write-Host "✅ Updated repository.json"
+          
+          # Create summary
+          Write-Host "`n📋 Plugin Registry Update Summary:"
+          Write-Host "Total plugins: $($plugins.Count)"
+          foreach ($cat in $categories.Keys) {
+              if ($categories[$cat].Count -gt 0) {
+                  Write-Host "$cat`: $($categories[$cat].Count) plugins"
+              }
+          }
+          '@
+          
+          # Execute the update script
+          Invoke-Expression $updateScript
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet HEAD -- plugin-index.json repository.json; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in plugin registry files"
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in plugin registry files"
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add plugin-index.json repository.json
+          git commit -m "🤖 Auto-update plugin registry
+
+          - Updated plugin-index.json with current plugin inventory
+          - Updated repository.json statistics and category counts
+          - Triggered by: ${{ github.event_name }}
+          - Commit: ${{ github.sha }}"
+          git push
+
+      - name: Create Plugin Registry Report
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          echo "## 📊 Plugin Registry Update Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The plugin registry has been automatically updated with the latest plugin information." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Changes Made:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Updated \`plugin-index.json\` with current plugin inventory" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Updated \`repository.json\` statistics and category counts" >> $GITHUB_STEP_SUMMARY
+          echo "- 🤖 Automatically committed changes" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Trigger Information:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Event:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: No changes detected
+        if: steps.changes.outputs.changes == 'false'
+        run: |
+          echo "## ℹ️ Plugin Registry Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "No changes were detected in the plugin registry. The registry is already up to date." >> $GITHUB_STEP_SUMMARY
